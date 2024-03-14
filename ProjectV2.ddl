@@ -339,3 +339,25 @@ INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, S
 VALUES (TO_DATE('2022-01-08 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-08 17:45:00', 'YYYY-MM-DD HH24:MI:SS'), 8, 3, 8, 1, 'Y');
 
 
+-- Drop existing users if they exist
+DROP USER bike_user CASCADE;
+DROP USER maintenance_user CASCADE;
+
+-- Create users
+CREATE USER bike_user IDENTIFIED BY BostonSpring2024#;
+CREATE USER maintenance_user IDENTIFIED BY NEUSpring2024;
+
+-- Grant necessary privileges to users
+GRANT SELECT, INSERT, UPDATE, DELETE ON bikemaintenance TO bike_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance TO maintenance_user;
+
+-- Grant SELECT privilege on each object individually
+GRANT SELECT ON customers TO bike_user, maintenance_user;
+GRANT SELECT ON bikes TO bike_user, maintenance_user;
+GRANT SELECT ON card TO bike_user, maintenance_user;
+GRANT SELECT ON fees TO bike_user, maintenance_user;
+GRANT SELECT ON stations TO bike_user, maintenance_user;
+GRANT SELECT ON trips TO bike_user, maintenance_user;
+
+
+
