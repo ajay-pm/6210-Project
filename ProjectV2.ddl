@@ -359,3 +359,48 @@ GRANT SELECT ON fees TO bike_user, maintenance_user;
 GRANT SELECT ON stations TO bike_user, maintenance_user;
 GRANT SELECT ON trips TO bike_user, maintenance_user;
 
+
+
+-- Drop existing users if they exist
+DROP USER bike_user CASCADE;
+DROP USER maintenance_user CASCADE;
+
+-- Create users
+CREATE USER bike_user IDENTIFIED BY BostonSpring2024#;
+CREATE USER maintenance_user IDENTIFIED BY NEUSpring2024;
+
+-- Grant necessary privileges to users
+GRANT SELECT, INSERT, UPDATE, DELETE ON bikemaintenance TO bike_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance TO maintenance_user;
+
+-- Grant SELECT privilege on each object individually
+GRANT SELECT ON customers TO bike_user, maintenance_user;
+GRANT SELECT ON bikes TO bike_user, maintenance_user;
+GRANT SELECT ON card TO bike_user, maintenance_user;
+GRANT SELECT ON fees TO bike_user, maintenance_user;
+GRANT SELECT ON stations TO bike_user, maintenance_user;
+GRANT SELECT ON trips TO bike_user, maintenance_user;
+
+-- Drop existing views if they exist
+DROP VIEW bike_info_view;
+DROP VIEW card_info_view;
+DROP VIEW fee_info_view;
+DROP VIEW trip_info_view;
+
+-- Recreate views with distinct names
+CREATE VIEW bike_info_view AS
+SELECT bike_id, model, status, location_id
+FROM bikes;
+
+CREATE VIEW card_info_view AS
+SELECT card_id, card_number, card_expiry, card_ssn, customer_id
+FROM card;
+
+CREATE VIEW fee_info_view AS
+SELECT fee_id, fee_per_hour, date_of_implementation
+FROM fees;
+
+CREATE VIEW trip_info_view AS
+SELECT trip_id, customers_customer_id, bikes_bike_id, start_time, end_time
+FROM trips;
+
