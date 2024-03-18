@@ -360,7 +360,6 @@ GRANT SELECT ON stations TO bike_user, maintenance_user;
 GRANT SELECT ON trips TO bike_user, maintenance_user;
 
 
-
 -- Drop existing users if they exist
 DROP USER bike_user CASCADE;
 DROP USER maintenance_user CASCADE;
