@@ -1089,5 +1089,5 @@ BEGIN
     IF email_count > 0 THEN
         RAISE_APPLICATION_ERROR(-20002, 'A customer with this email already exists.');
     END IF;
-END prevent_duplicate_customers_procedure;
+END prevent_duplicate_customers_procedure; 
 /
