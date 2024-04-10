@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 DROP TABLE bikemaintenance;
 DROP TABLE card;
 DROP TABLE trips;
@@ -360,9 +360,6 @@ GRANT SELECT ON fees TO bike_user, maintenance_user;
 GRANT SELECT ON stations TO bike_user, maintenance_user;
 GRANT SELECT ON trips TO bike_user, maintenance_user;
 
-
-
-=======
 SET AUTOCOMMIT ON;
 
 BEGIN
@@ -404,6 +401,8 @@ BEGIN
         maintenance_maintenance_id  NUMBER NOT NULL,
         log_time                    DATE NOT NULL
     )';
+  
+EXECUTE IMMEDIATE 'ALTER TABLE bikemaintenance ADD CONSTRAINT bikemaintenance_pk PRIMARY KEY ( bikemaintenaince_id )';
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
@@ -413,9 +412,6 @@ EXCEPTION
         END IF;
 END;
 /
-
-
-
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE SEQUENCE bikeID START WITH 1 INCREMENT BY 1';
@@ -566,6 +562,20 @@ EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
             DBMS_OUTPUT.PUT_LINE('Table customers already exists. Skipping creation.');
+    customer_id NUMBER DEFAULT customerID.NEXTVAL NOT NULL,
+    first_name  VARCHAR2(50) NOT NULL
+    ,
+    last_name   VARCHAR2(50) NOT NULL
+    ,
+    email       VARCHAR2(50) NOT NULL
+    ,
+    phone       NUMBER NOT NULL
+)';
+EXECUTE IMMEDIATE 'ALTER TABLE customers ADD CONSTRAINT customers_pk PRIMARY KEY ( customer_id )';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
+            DBMS_OUTPUT.PUT_LINE('Table bikemaintenance already exists. Skipping creation.');
         ELSE
             RAISE;  -- Reraise the exception if it's not ORA-00955
         END IF;
@@ -591,8 +601,6 @@ EXCEPTION
         END IF;
 END;
 /
-
-BEGIN
     EXECUTE IMMEDIATE 'CREATE SEQUENCE FeeID START WITH 1 INCREMENT BY 1';
 EXCEPTION
     WHEN OTHERS THEN
@@ -1348,11 +1356,3 @@ BEGIN
 END;
 /
 
-
-
-
-
-
-
-
->>>>>>> Stashed changes
