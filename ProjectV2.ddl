@@ -966,4 +966,128 @@ BEGIN
     END IF;
 END;
 /
+--mark_bike_maintenance_procedure
+CREATE OR REPLACE PROCEDURE mark_bike_maintenance_procedure (
+    new_bike_id IN bikes.bike_id%TYPE
+)
+AS
+BEGIN
+    UPDATE bikes
+    SET status = 'Under Maintenance'
+    WHERE bike_id = new_bike_id;
+END mark_bike_maintenance_procedure;
+/
 
+--update_bike_status_procedure
+CREATE OR REPLACE PROCEDURE update_bike_status_procedure (
+    new_bike_id IN trips.bikes_bike_id%TYPE,
+    new_end_time IN trips.end_time%TYPE
+)
+AS
+BEGIN
+    IF new_end_time IS NULL THEN
+        UPDATE bikes
+        SET status = 'In Use'
+        WHERE bike_id = new_bike_id;
+    ELSE
+        UPDATE bikes
+        SET status = 'Available'
+        WHERE bike_id = new_bike_id;
+    END IF;
+END update_bike_status_procedure;
+/
+
+--check_bike_availability_procedure
+CREATE OR REPLACE PROCEDURE check_bike_availability_procedure (
+    new_bike_id IN trips.bikes_bike_id%TYPE,
+    new_end_time IN trips.end_time%TYPE
+)
+AS
+    v_bike_status bikes.status%TYPE;
+BEGIN
+    IF new_end_time IS NULL THEN
+        SELECT status INTO v_bike_status
+        FROM bikes
+        WHERE bike_id = new_bike_id;
+        
+        IF v_bike_status != 'Available' THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Selected bike is not available for rent.');
+        END IF;
+    END IF;
+END check_bike_availability_procedure;
+/
+
+--bike_maintenance_log_procedure
+CREATE OR REPLACE PROCEDURE bike_maintenance_log_procedure (
+    new_bike_maintenance_id IN bikemaintenance.bikemaintenaince_id%TYPE,
+    new_bike_id IN bikemaintenance.bikes_bike_id%TYPE,
+    new_maintenance_id IN bikemaintenance.maintenance_maintenance_id%TYPE
+)
+AS
+BEGIN
+    INSERT INTO maintenance_log (bikemaintenaince_id, bikes_bike_id, maintenance_maintenance_id, log_time)
+    VALUES (new_bike_maintenance_id, new_bike_id, new_maintenance_id, SYSDATE);
+END bike_maintenance_log_procedure;
+/
+
+--fee_change_log_procedure
+CREATE OR REPLACE PROCEDURE fee_change_log_procedure (
+    old_fee_id IN fees.fee_id%TYPE,
+    old_fee_per_hour IN fees.fee_per_hour%TYPE,
+    new_fee_per_hour IN fees.fee_per_hour%TYPE
+)
+AS
+BEGIN
+    INSERT INTO fee_changes_log (fee_id, old_fee_per_hour, new_fee_per_hour, change_date)
+    VALUES (old_fee_id, old_fee_per_hour, new_fee_per_hour, SYSDATE);
+END fee_change_log_procedure;
+/
+--customer_trip_log_procedure
+CREATE OR REPLACE PROCEDURE customer_trip_log_procedure (
+    new_trip_id IN trips.trip_id%TYPE,
+    new_customer_id IN trips.customers_customer_id%TYPE,
+    new_start_time IN trips.start_time%TYPE,
+    new_end_time IN trips.end_time%TYPE
+)
+AS
+BEGIN
+    INSERT INTO customer_activity_log (trip_id, customer_id, start_time, end_time)
+    VALUES (new_trip_id, new_customer_id, new_start_time, new_end_time);
+END customer_trip_log_procedure;
+/
+--card_audit_log_procedure
+CREATE OR REPLACE PROCEDURE card_audit_log_procedure (
+    old_card_id IN card.card_id%TYPE,
+    old_card_number IN card.card_number%TYPE,
+    new_card_number IN card.card_number%TYPE,
+    action_type IN VARCHAR2
+)
+AS
+BEGIN
+    IF action_type = 'UPDATE' THEN
+        INSERT INTO card_audit_log (card_id, old_card_number, new_card_number, change_date, action_type)
+        VALUES (old_card_id, SUBSTR(TO_CHAR(old_card_number), -4), SUBSTR(TO_CHAR(new_card_number), -4), SYSDATE, 'UPDATE');
+    ELSIF action_type = 'DELETE' THEN
+        INSERT INTO card_audit_log (card_id, old_card_number, change_date, action_type)
+        VALUES (old_card_id, SUBSTR(TO_CHAR(old_card_number), -4), SYSDATE, 'DELETE');
+    END IF;
+END card_audit_log_procedure;
+/
+
+--prevent_duplicate_customers_procedure
+CREATE OR REPLACE PROCEDURE prevent_duplicate_customers_procedure (
+    new_email IN customers.email%TYPE
+)
+AS
+    email_count NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO email_count
+    FROM customers
+    WHERE email = new_email;
+
+    IF email_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'A customer with this email already exists.');
+    END IF;
+END prevent_duplicate_customers_procedure;
+/
