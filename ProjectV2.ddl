@@ -1,12 +1,11 @@
-
 SET AUTOCOMMIT ON;
 
 BEGIN
-    EXECUTE IMMEDIATE 'CREATE SEQUENCE bikemaintenanceID START WITH 1 INCREMENT BY 1';
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE maintenanceID START WITH 1 INCREMENT BY 1';
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table bikemaintenance already exists. Skipping creation.');
+            DBMS_OUTPUT.PUT_LINE('Table maintenanceID already exists. Skipping creation.');
         ELSE
             RAISE;  -- Reraise the exception if it's not ORA-00955
         END IF;
@@ -15,10 +14,13 @@ END;
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE maintenance_log (
-        log_id                      NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-        bikemaintenaince_id         NUMBER NOT NULL,
-        bikes_bike_id               NUMBER NOT NULL,
-        maintenance_maintenance_id  NUMBER NOT NULL,
+        log_id               NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
+        maintenance_id       NUMBER NOT NULL,
+        bike_id              NUMBER NOT NULL,
+        start_of_maintenance DATE,
+        end_of_maintenance   DATE,
+        description          VARCHAR2(50),
+        maintanance_operator VARCHAR2(50),
         log_time                    DATE NOT NULL
     )';
     DBMS_OUTPUT.PUT_LINE('Table maintenance_log created successfully.');
@@ -28,26 +30,6 @@ EXCEPTION
             DBMS_OUTPUT.PUT_LINE('Table maintenance_log already exists.');
         ELSE
             RAISE; -- Re-raise the exception if it is not the expected ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE TABLE bikemaintenance (
-        log_id                      NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-        bikemaintenaince_id         NUMBER NOT NULL,
-        bikes_bike_id               NUMBER NOT NULL,
-        maintenance_maintenance_id  NUMBER NOT NULL,
-        log_time                    DATE NOT NULL
-    )';
-  
-EXECUTE IMMEDIATE 'ALTER TABLE bikemaintenance ADD CONSTRAINT bikemaintenance_pk PRIMARY KEY ( bikemaintenaince_id )';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table bikemaintenance already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
         END IF;
 END;
 /
@@ -135,7 +117,7 @@ END;
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE card_audit_log (
-        log_id          NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        log_id          NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
         card_id         NUMBER NOT NULL,
         old_card_number VARCHAR2(16),
         new_card_number VARCHAR2(16),
@@ -156,11 +138,11 @@ END;
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE customer_activity_log (
-        log_id        NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        log_id        NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
         trip_id       NUMBER NOT NULL,
         customer_id   NUMBER NOT NULL,
         start_time    DATE NOT NULL,
-        end_time      DATE NOT NULL
+        end_time      DATE
     )';
     DBMS_OUTPUT.PUT_LINE('Table customer_activity_log created successfully.');
 EXCEPTION
@@ -210,7 +192,7 @@ END;
             
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE fee_changes_log (
-        log_id            NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        log_id            NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1)PRIMARY KEY,
         fee_id            NUMBER NOT NULL,
         old_fee_per_hour  NUMBER,
         new_fee_per_hour  NUMBER,
@@ -256,27 +238,18 @@ EXCEPTION
 END;
 /
 
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE SEQUENCE maintenanceID START WITH 1 INCREMENT BY 1';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table maintenanceID already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE maintenance (
-    maintenance_id       NUMBER DEFAULT maintenanceID.NEXTVAL NOT NULL,
-    start_of_maintenance DATE,
-    end_of_maintenance   DATE,
-    description          VARCHAR2(50),
-    maintanance_operator VARCHAR2(50) 
-)';
-EXECUTE IMMEDIATE 'ALTER TABLE maintenance ADD CONSTRAINT maintenance_pk PRIMARY KEY ( maintenance_id )';
+        maintenance_id       NUMBER DEFAULT maintenanceID.NEXTVAL NOT NULL,
+        bike_id              NUMBER NOT NULL,
+        start_of_maintenance DATE,
+        end_of_maintenance   DATE,
+        description          VARCHAR2(50),
+        maintanance_operator VARCHAR2(50)
+    )';
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance ADD CONSTRAINT maintenance_pk PRIMARY KEY ( maintenance_id )';
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance ADD CONSTRAINT trips_bikes_fk FOREIGN KEY ( bike_id ) REFERENCES bikes ( bike_id )';
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
@@ -337,11 +310,11 @@ BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE trips (
         trip_id               NUMBER DEFAULT tripID.NEXTVAL NOT NULL,
         start_time            DATE NOT NULL,
-        end_time              DATE NOT NULL,
+        end_time              DATE,
         bikes_bike_id         NUMBER NOT NULL,
         customers_customer_id NUMBER NOT NULL,
         start_station_id      NUMBER NOT NULL,
-        end_station_id        NUMBER NOT NULL,
+        end_station_id        NUMBER,
         trip_paid             VARCHAR2(50) 
     )';
 
@@ -476,57 +449,31 @@ VALUES (20.50, TO_DATE('2022-07-15', 'YYYY-MM-DD'));
 INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
 VALUES (7.75, TO_DATE('2022-08-20', 'YYYY-MM-DD'));
 
---insert bikemaintenance data
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (1,1);
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (2,2);
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (3,3);
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (4,4);
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (5,5);
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (6,6);
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (7,7);
-
-INSERT INTO bikemaintenance (bikes_bike_id, maintenance_maintenance_ID)
-VALUES (8,8);
-
 --insert maintenance data
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-03', 'YYYY-MM-DD'), 'Routine check', 'A');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-03', 'YYYY-MM-DD'), 'Routine check', 'A');
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-02-15', 'YYYY-MM-DD'), TO_DATE('2022-02-16', 'YYYY-MM-DD'), 'Battery replacement', 'B');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (1, TO_DATE('2022-02-15', 'YYYY-MM-DD'), TO_DATE('2022-02-16', 'YYYY-MM-DD'), 'Battery replacement', 'B');
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-03-20', 'YYYY-MM-DD'), TO_DATE('2022-03-21', 'YYYY-MM-DD'), 'Brake adjustment', 'C');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (2, TO_DATE('2022-03-20', 'YYYY-MM-DD'), TO_DATE('2022-03-21', 'YYYY-MM-DD'), 'Brake adjustment', 'C');
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-04-10', 'YYYY-MM-DD'), TO_DATE('2022-04-12', 'YYYY-MM-DD'), 'Tire replacement', 'D');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (3, TO_DATE('2022-04-10', 'YYYY-MM-DD'), TO_DATE('2022-04-12', 'YYYY-MM-DD'), 'Tire replacement', 'D');
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-05-05', 'YYYY-MM-DD'), TO_DATE('2022-05-07', 'YYYY-MM-DD'), 'Chain lubrication', 'E');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (4, TO_DATE('2022-05-05', 'YYYY-MM-DD'), TO_DATE('2022-05-07', 'YYYY-MM-DD'), 'Chain lubrication', 'E');
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-06-08', 'YYYY-MM-DD'), TO_DATE('2022-06-09', 'YYYY-MM-DD'), 'Frame inspection', 'F');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (5, TO_DATE('2022-06-08', 'YYYY-MM-DD'), TO_DATE('2022-06-09', 'YYYY-MM-DD'), 'Frame inspection', 'F');
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-07-15', 'YYYY-MM-DD'), TO_DATE('2022-07-17', 'YYYY-MM-DD'), 'Light replacement', 'G');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (2, TO_DATE('2022-07-15', 'YYYY-MM-DD'), TO_DATE('2022-07-17', 'YYYY-MM-DD'), 'Light replacement', 'G');
 
-INSERT INTO MAINTENANCE (START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (TO_DATE('2022-08-20', 'YYYY-MM-DD'), TO_DATE('2022-08-21', 'YYYY-MM-DD'), 'Handlebar adjustment', 'H');
+INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+VALUES (5, TO_DATE('2022-08-20', 'YYYY-MM-DD'), TO_DATE('2022-08-21', 'YYYY-MM-DD'), 'Handlebar adjustment', 'H');
 
 --Insert station data
 INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
@@ -605,7 +552,6 @@ END;
 /
 
 -- Grant necessary privileges to users
-GRANT SELECT, INSERT, UPDATE, DELETE ON bikemaintenance TO bike_user;
 GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance TO maintenance_user;
 
 -- Grant SELECT privilege on each object individually
@@ -663,9 +609,7 @@ BEGIN
     FROM
         bikes b
     LEFT JOIN
-        bikemaintenance bm ON b.bike_id = bm.bikes_bike_id
-    LEFT JOIN
-        maintenance m ON bm.maintenance_maintenance_id = m.maintenance_id';
+        maintenance m ON b.bike_id = m.bike_id';
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
@@ -817,18 +761,29 @@ END;
 
 -- Create Triggers 
 
-CREATE OR REPLACE TRIGGER trg_prevent_duplicate_customers
+CREATE OR REPLACE TRIGGER check_duplicate_customer
 BEFORE INSERT ON customers
 FOR EACH ROW
 DECLARE
-    v_exists NUMBER;
+    phone_exists NUMBER;
+    email_exists NUMBER;
 BEGIN
+    -- Check if the new row being inserted has a duplicate phone number
     SELECT COUNT(*)
-    INTO v_exists
+    INTO phone_exists
+    FROM customers
+    WHERE phone = :new.phone;
+
+    -- Check if the new row being inserted has a duplicate email
+    SELECT COUNT(*)
+    INTO email_exists
     FROM customers
     WHERE email = :new.email;
 
-    IF v_exists > 0 THEN
+    -- If a duplicate phone number or email is found, raise an exception
+    IF phone_exists > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'A customer with this phone number already exists.');
+    ELSIF email_exists > 0 THEN
         RAISE_APPLICATION_ERROR(-20002, 'A customer with this email already exists.');
     END IF;
 END;
@@ -854,12 +809,12 @@ END;
 
 
 CREATE OR REPLACE TRIGGER mark_bike_maintenance
-AFTER INSERT ON bikemaintenance
+AFTER INSERT ON maintenance
 FOR EACH ROW
 BEGIN
     UPDATE bikes
     SET status = 'Under Maintenance'
-    WHERE bike_id = :new.bikes_bike_id;
+    WHERE bike_id = :new.bike_id;
 END;
 /
 
@@ -898,11 +853,11 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER trg_bikemaintenance_log
-AFTER INSERT ON bikemaintenance
+AFTER INSERT OR Update ON maintenance
 FOR EACH ROW
 BEGIN
-    INSERT INTO maintenance_log (bikemaintenaince_id, bikes_bike_id, maintenance_maintenance_id, log_time)
-    VALUES (:new.bikemaintenaince_id, :new.bikes_bike_id, :new.maintenance_maintenance_id, SYSDATE);
+    INSERT INTO maintenance_log (maintenance_id, bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR, LOG_TIME)
+    VALUES (:new.maintenance_id, :new.bike_id, :new.START_OF_MAINTENANCE, :new.END_OF_MAINTENANCE, :new.DESCRIPTION, :new.MAINTANANCE_OPERATOR, SYSDATE);
 END;
 /
 
@@ -916,7 +871,7 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER trg_log_customer_trip
-AFTER INSERT ON trips
+AFTER INSERT or update ON trips
 FOR EACH ROW
 BEGIN
     INSERT INTO customer_activity_log (trip_id, customer_id, start_time, end_time)
@@ -950,22 +905,27 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE TRIGGER trg_prevent_duplicate_customers
-BEFORE INSERT ON customers
+CREATE OR REPLACE TRIGGER trg_prevent_open_trip
+BEFORE INSERT ON trips
 FOR EACH ROW
 DECLARE
-    email_count NUMBER;
+    v_open_trip_count NUMBER;
 BEGIN
+    -- Check if the customer already has an open trip
     SELECT COUNT(*)
-    INTO email_count
-    FROM customers
-    WHERE email = :new.email;
+    INTO v_open_trip_count
+    FROM trips
+    WHERE customers_customer_id = :NEW.customers_customer_id
+      AND end_time IS NULL; -- Assumes an open trip doesn't have an end time
 
-    IF email_count > 0 THEN
-        RAISE_APPLICATION_ERROR(-20002, 'A customer with this email already exists.');
+    IF v_open_trip_count > 0 THEN
+        -- Customer already has an open trip, raise an exception to prevent the new trip insertion
+        RAISE_APPLICATION_ERROR(-20001, 'Customer already has an open trip. Cannot open a new trip.');
     END IF;
 END;
 /
+
+
 --mark_bike_maintenance_procedure
 CREATE OR REPLACE PROCEDURE mark_bike_maintenance_procedure (
     new_bike_id IN bikes.bike_id%TYPE
@@ -1016,20 +976,66 @@ BEGIN
     END IF;
 END check_bike_availability_procedure;
 /
-
+    
 --bike_maintenance_log_procedure
-CREATE OR REPLACE PROCEDURE bike_maintenance_log_procedure (
-    new_bike_maintenance_id IN bikemaintenance.bikemaintenaince_id%TYPE,
-    new_bike_id IN bikemaintenance.bikes_bike_id%TYPE,
-    new_maintenance_id IN bikemaintenance.maintenance_maintenance_id%TYPE
+CREATE OR REPLACE PROCEDURE maintenance_log_procedure (
+    new_bike_maintenance_id IN maintenance.maintenance_id%TYPE,
+    new_bike_id IN maintenance.bike_id%TYPE,
+    new_START_OF_MAINTENANCE IN maintenance.START_OF_MAINTENANCE%TYPE,
+    new_END_OF_MAINTENANCE IN maintenance.END_OF_MAINTENANCE%TYPE,
+    new_DESCRIPTION IN maintenance.DESCRIPTION%TYPE,
+    new_MAINTANANCE_OPERATOR IN maintenance.MAINTANANCE_OPERATOR%TYPE
 )
 AS
 BEGIN
-    INSERT INTO maintenance_log (bikemaintenaince_id, bikes_bike_id, maintenance_maintenance_id, log_time)
-    VALUES (new_bike_maintenance_id, new_bike_id, new_maintenance_id, SYSDATE);
-END bike_maintenance_log_procedure;
+    INSERT INTO maintenance_log (maintenance_id, bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR, LOG_TIME)
+    VALUES (new_bike_maintenance_id, new_bike_id, new_START_OF_MAINTENANCE,new_END_OF_MAINTENANCE,new_DESCRIPTION,new_MAINTANANCE_OPERATOR, SYSDATE);
+END maintenance_log_procedure;
+/
+-- Create or replace the procedure to insert a new maintenance entry
+CREATE OR REPLACE PROCEDURE create_new_maintenance_procedure (
+    new_maintenance_id IN maintenance.maintenance_id%TYPE,
+    new_bike_id IN maintenance.bike_id%TYPE,
+    new_start_of_maintenance IN maintenance.START_OF_MAINTENANCE%TYPE,
+    new_end_of_maintenance IN maintenance.END_OF_MAINTENANCE%TYPE,
+    new_description IN maintenance.DESCRIPTION%TYPE,
+    new_maintenance_operator IN maintenance.MAINTANANCE_OPERATOR%TYPE
+)
+AS
+BEGIN
+    INSERT INTO maintenance (maintenance_id, bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
+    VALUES (new_maintenance_id, new_bike_id, new_start_of_maintenance, new_end_of_maintenance, new_description, new_maintenance_operator);
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('New maintenance log entry created successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END create_new_maintenance_procedure;
 /
 
+-- Create or replace the procedure to update the end of maintenance in a maintenance log entry
+CREATE OR REPLACE PROCEDURE update_end_of_maintenance (
+    maintenance_log_id IN maintenance_log.maintenance_id%TYPE,
+    new_end_of_maintenance IN maintenance_log.END_OF_MAINTENANCE%TYPE
+)
+AS
+BEGIN
+    UPDATE maintenance
+    SET END_OF_MAINTENANCE = new_end_of_maintenance
+    WHERE maintenance_id = maintenance_log_id;
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('End of maintenance updated successfully.');
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No maintenance log entry found with ID ' || maintenance_log_id);
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END update_end_of_maintenance;
+/
 --fee_change_log_procedure
 CREATE OR REPLACE PROCEDURE fee_change_log_procedure (
     old_fee_id IN fees.fee_id%TYPE,
@@ -1091,3 +1097,107 @@ BEGIN
     END IF;
 END prevent_duplicate_customers_procedure; 
 /
+
+-- Create or replace the procedure to insert a new customer
+CREATE OR REPLACE PROCEDURE create_new_customer (
+    new_first_name IN customers.first_name%TYPE,
+    new_last_name IN customers.last_name%TYPE,
+    new_email IN customers.email%TYPE,
+    new_phone IN customers.phone%TYPE
+)
+AS
+BEGIN
+    INSERT INTO customers (first_name, last_name, email, phone)
+    VALUES ( new_first_name, new_last_name, new_email, new_phone);
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('New customer created successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END create_new_customer;
+/
+
+CREATE OR REPLACE PROCEDURE new_trip (
+    new_bike_id IN trips.bikes_bike_id%TYPE,
+    new_customer_id IN trips.customers_customer_id%TYPE,
+    new_start_station_id IN trips.start_station_id%TYPE
+)
+AS
+BEGIN
+    INSERT INTO trips (start_time, end_time, bikes_bike_id, customers_customer_id, start_station_id, end_station_id, trip_paid)
+    VALUES (SYSDATE, NULL, new_bike_id, new_customer_id, new_start_station_id, NULL, NULL);
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('New trip entry created successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END new_trip;
+/
+
+-- Create or replace the procedure to show a customer their current trip
+CREATE OR REPLACE PROCEDURE show_current_trip (
+    customer_id IN trips.customers_customer_id%TYPE
+)
+AS
+    v_trip_id trips.trip_id%TYPE;
+    v_start_time trips.start_time%TYPE;
+    v_end_time trips.end_time%TYPE;
+    v_bike_id trips.bikes_bike_id%TYPE;
+    v_start_station_id trips.start_station_id%TYPE;
+    v_end_station_id trips.end_station_id%TYPE;
+BEGIN
+    SELECT trip_id, start_time, end_time, bikes_bike_id, start_station_id, end_station_id
+    INTO v_trip_id, v_start_time, v_end_time, v_bike_id, v_start_station_id, v_end_station_id
+    FROM trips
+    WHERE customers_customer_id = customer_id
+      AND end_time IS NULL; -- Retrieves only open trips
+
+    -- Display the current trip details
+    DBMS_OUTPUT.PUT_LINE('Current Trip Details:');
+    DBMS_OUTPUT.PUT_LINE('Trip ID: ' || v_trip_id);
+    DBMS_OUTPUT.PUT_LINE('Start Time: ' || TO_CHAR(v_start_time, 'DD-MON-YY'));
+    DBMS_OUTPUT.PUT_LINE('End Time: ' || NVL(TO_CHAR(v_end_time, 'DD-MON-YY HH24:MI:SS'), 'Not ended yet'));
+    DBMS_OUTPUT.PUT_LINE('Bike ID: ' || v_bike_id);
+    DBMS_OUTPUT.PUT_LINE('Start Station ID: ' || v_start_station_id);
+    DBMS_OUTPUT.PUT_LINE('End Station ID: ' || NVL(TO_CHAR(v_end_station_id), 'Not ended yet'));
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No open trip found for customer ' || customer_id);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END show_current_trip;
+/
+
+CREATE OR REPLACE PROCEDURE update_trip_end_details (
+    customer_id_in IN trips.customers_customer_id%TYPE,
+    end_station_id_in IN trips.end_station_id%TYPE
+)
+AS
+    v_trip_id trips.trip_id%TYPE;
+BEGIN
+    -- Find the open trip for the specified customer
+    SELECT trip_id
+    INTO v_trip_id
+    FROM trips
+    WHERE customers_customer_id = customer_id_in
+      AND end_time IS NULL; -- Assumes an open trip doesn't have an end time
+
+    -- Update the end time and end station for the open trip
+    UPDATE trips
+    SET end_time = SYSDATE,
+        end_station_id = end_station_id_in
+    WHERE trip_id = v_trip_id;
+
+    DBMS_OUTPUT.PUT_LINE('End time and station updated for trip ID ' || v_trip_id);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No open trip found for customer ' || customer_id_in);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END update_trip_end_details;
+/
+
