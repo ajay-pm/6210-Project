@@ -69,22 +69,6 @@ END;
 /
 
 BEGIN
-    EXECUTE IMMEDIATE 'CREATE TABLE Bike_count_per_station (
-        station_id    NUMBER PRIMARY KEY,
-        trips_started INT DEFAULT 0,
-        trips_ended   INT DEFAULT 0
-    )';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table Bike_count_per_station already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
     EXECUTE IMMEDIATE 'CREATE SEQUENCE cardID START WITH 1 INCREMENT BY 1';
 EXCEPTION
     WHEN OTHERS THEN
@@ -350,19 +334,7 @@ END;
 /
 
 
-
 -- Create users
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE USER system_admin IDENTIFIED BY BostonSpring2024#';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -1920 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table bikemaintenance already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE USER bike_user IDENTIFIED BY BostonSpring2024#';
@@ -1074,7 +1046,7 @@ GRANT EXECUTE ON fee_change_procedure TO system_admin;
 GRANT EXECUTE ON new_trip TO system_admin, bike_user;
 GRANT EXECUTE ON show_current_trip TO system_admin, bike_user;
 GRANT EXECUTE ON update_end_of_maintenance TO system_admin, maintenance_user;
-GRANT EXECUTE ON update_end_of_trip_details TO system_admin, bike_user;
+GRANT EXECUTE ON UPDATE_TRIP_END_DETAILS TO system_admin, bike_user;
 
 GRANT EXECUTE ON calculate_rental_fee TO system_admin;
 GRANT EXECUTE ON get_customer_status TO system_admin;
