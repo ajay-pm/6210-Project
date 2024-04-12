@@ -841,14 +841,25 @@ CREATE OR REPLACE PROCEDURE create_new_customer (
     new_first_name IN customers.first_name%TYPE,
     new_last_name IN customers.last_name%TYPE,
     new_email IN customers.email%TYPE,
-    new_phone IN customers.phone%TYPE
+    new_phone IN customers.phone%TYPE,
+    new_card_number IN card.card_number%TYPE,
+    new_card_expiry IN card.card_expiry%TYPE,
+    new_card_ssn IN card.card_ssn%TYPE
 )
 AS
+    v_customer_id customers.customer_id%TYPE;  -- Define a variable to hold customer_id
 BEGIN
+    -- Insert into customers table
     INSERT INTO customers (first_name, last_name, email, phone)
-    VALUES ( new_first_name, new_last_name, new_email, new_phone);
+    VALUES (new_first_name, new_last_name, new_email, new_phone)
+    RETURNING customer_id INTO v_customer_id;  -- Retrieve the generated customer_id
+
+    -- Insert into card table using the retrieved customer_id
+    INSERT INTO card (card_number, card_expiry, card_ssn, customer_id)
+    VALUES (new_card_number, new_card_expiry, new_card_ssn, v_customer_id);
 
     COMMIT;
+    
     DBMS_OUTPUT.PUT_LINE('New customer created successfully.');
 EXCEPTION
     WHEN OTHERS THEN
