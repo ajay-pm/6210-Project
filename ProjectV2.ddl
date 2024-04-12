@@ -1201,3 +1201,105 @@ EXCEPTION
 END update_trip_end_details;
 /
 
+CREATE OR REPLACE FUNCTION calculate_rental_fee(
+    trip_id_in IN trips.trip_id%TYPE
+) RETURN NUMBER
+AS
+    start_time DATE;
+    end_time DATE;
+    fee_per_hour NUMBER := 10.0;  -- Assume a default fee or fetch dynamically as needed
+    total_fee NUMBER;
+    rental_duration_hrs NUMBER;
+BEGIN
+    -- Retrieve start and end times based on trip ID
+    SELECT start_time, end_time
+    INTO start_time, end_time
+    FROM trips
+    WHERE trip_id = trip_id_in;
+
+    -- Ensure end_time is not null to proceed with duration calculation
+    IF end_time IS NOT NULL THEN
+        -- Calculate the duration in hours
+        rental_duration_hrs := (end_time - start_time) * 24;
+    ELSE
+        -- If end_time is null, assume ongoing trip with no fees applicable yet
+        rental_duration_hrs := 0;
+    END IF;
+
+    -- Calculate total fee
+    total_fee := rental_duration_hrs * fee_per_hour;
+
+    RETURN total_fee;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- If the trip information is not found, return zero as fee
+        RETURN 0;
+    WHEN OTHERS THEN
+        RAISE;
+END;
+/
+
+
+
+CREATE OR REPLACE FUNCTION is_bike_available(
+    bike_id_in IN bikes.bike_id%TYPE
+) RETURN VARCHAR2
+AS
+    bike_status VARCHAR2(50);
+BEGIN
+    SELECT status INTO bike_status FROM bikes WHERE bike_id = bike_id_in;
+
+    IF bike_status = 'Available' THEN
+        RETURN 'Yes';
+    ELSE
+        RETURN 'No';
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'Bike not found';
+    WHEN OTHERS THEN
+        RAISE;
+END;
+/
+
+CREATE OR REPLACE FUNCTION get_customer_status(
+    customer_id_in IN customers.customer_id%TYPE
+) RETURN VARCHAR2
+AS
+    card_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO card_count FROM card WHERE customer_id = customer_id_in;
+
+    IF card_count > 0 THEN
+        RETURN 'Active';
+    ELSE
+        RETURN 'Inactive';
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'No customer found';
+    WHEN OTHERS THEN
+        RAISE;
+END;
+/
+
+CREATE OR REPLACE FUNCTION total_trips_from_station(
+    station_id_in IN stations.station_id%TYPE
+) RETURN NUMBER
+AS
+    trips_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO trips_count FROM trips WHERE start_station_id = station_id_in;
+
+    RETURN trips_count;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        RAISE;
+END;
+/
+
+
+
+
