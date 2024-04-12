@@ -349,184 +349,21 @@ EXCEPTION
 END;
 /
 
---Insert customer data
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('John', 'Smith', 'john@example.com', '1234567890');
-
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('Alice', 'Johnson', 'alice@example.com', '2345678901');
-
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('Michael', 'Williams', 'michael@example.com', '3456789012');
-
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('Emily', 'Brown', 'emily@example.com', '4567890123');
-
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('Daniel', 'Jones', 'daniel@example.com', '5678901234');
-
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('Sarah', 'Davis', 'sarah@example.com', '6789012345');
-
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('Jessica', 'Miller', 'jessica@example.com', '7890123456');
-
-INSERT INTO CUSTOMERS (FIRST_NAME, LAST_NAME, EMAIL, PHONE)
-VALUES ('David', 'Wilson', 'david@example.com', '8901234567');
-
---insert bike data
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('Mountain', 'Available', 'Station A', TO_DATE('2022-01-15', 'YYYY-MM-DD'));
-
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('Road', 'Available', 'Station B', TO_DATE('2022-02-20', 'YYYY-MM-DD'));
-
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('Hybrid', 'In Use', 'Station C', TO_DATE('2022-03-10', 'YYYY-MM-DD'));
-
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('Electric', 'Under Maintenance', 'Station D', TO_DATE('2022-04-05', 'YYYY-MM-DD'));
-
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('Road', 'Available', 'Station E', TO_DATE('2022-05-25', 'YYYY-MM-DD'));
-
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('Cruiser', 'Available', 'Station F', TO_DATE('2022-06-14', 'YYYY-MM-DD'));
-
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('BMX', 'Available', 'Station G', TO_DATE('2022-07-30', 'YYYY-MM-DD'));
-
-INSERT INTO BIKES (MODEL, STATUS, LOCATION_ID, PURCHASE_DATE)
-VALUES ('City', 'Available', 'Station H', TO_DATE('2022-08-08', 'YYYY-MM-DD'));
-
---insert card data
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (1234567890123456, TO_DATE('2025-12-31', 'YYYY-MM-DD'), 1234, 1);
-
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (9876543210987654, TO_DATE('2024-10-31', 'YYYY-MM-DD'), 5678, 2);
-
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (1111222233334444, TO_DATE('2026-06-30', 'YYYY-MM-DD'), 9876, 3);
-
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (4444333322221111, TO_DATE('2025-09-15', 'YYYY-MM-DD'), 5432, 4);
-
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (5555666677778888, TO_DATE('2023-04-28', 'YYYY-MM-DD'), 8765, 5);
-
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (8888777766665555, TO_DATE('2024-12-01', 'YYYY-MM-DD'), 2109, 6);
-
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (9999888877776666, TO_DATE('2026-03-22', 'YYYY-MM-DD'), 3145, 7);
-
-INSERT INTO CARD (CARD_NUMBER, CARD_EXPIRY, CARD_SSN, CUSTOMER_ID)
-VALUES (7777666655554444, TO_DATE('2025-08-09', 'YYYY-MM-DD'), 8234, 8);
-
---insert fee data
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (10.50, TO_DATE('2022-01-01', 'YYYY-MM-DD'));
-
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (8.75, TO_DATE('2022-02-15', 'YYYY-MM-DD'));
-
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (15.00, TO_DATE('2022-03-20', 'YYYY-MM-DD'));
-
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (5.25, TO_DATE('2022-04-10', 'YYYY-MM-DD'));
-
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (12.00, TO_DATE('2022-05-05', 'YYYY-MM-DD'));
-
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (9.99, TO_DATE('2022-06-08', 'YYYY-MM-DD'));
-
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (20.50, TO_DATE('2022-07-15', 'YYYY-MM-DD'));
-
-INSERT INTO FEES (FEE_PER_HOUR, DATE_OF_IMPLEMENTATION)
-VALUES (7.75, TO_DATE('2022-08-20', 'YYYY-MM-DD'));
-
---insert maintenance data
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (1, TO_DATE('2022-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-03', 'YYYY-MM-DD'), 'Routine check', 'A');
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (1, TO_DATE('2022-02-15', 'YYYY-MM-DD'), TO_DATE('2022-02-16', 'YYYY-MM-DD'), 'Battery replacement', 'B');
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (2, TO_DATE('2022-03-20', 'YYYY-MM-DD'), TO_DATE('2022-03-21', 'YYYY-MM-DD'), 'Brake adjustment', 'C');
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (3, TO_DATE('2022-04-10', 'YYYY-MM-DD'), TO_DATE('2022-04-12', 'YYYY-MM-DD'), 'Tire replacement', 'D');
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (4, TO_DATE('2022-05-05', 'YYYY-MM-DD'), TO_DATE('2022-05-07', 'YYYY-MM-DD'), 'Chain lubrication', 'E');
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (5, TO_DATE('2022-06-08', 'YYYY-MM-DD'), TO_DATE('2022-06-09', 'YYYY-MM-DD'), 'Frame inspection', 'F');
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (2, TO_DATE('2022-07-15', 'YYYY-MM-DD'), TO_DATE('2022-07-17', 'YYYY-MM-DD'), 'Light replacement', 'G');
-
-INSERT INTO MAINTENANCE (bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-VALUES (5, TO_DATE('2022-08-20', 'YYYY-MM-DD'), TO_DATE('2022-08-21', 'YYYY-MM-DD'), 'Handlebar adjustment', 'H');
-
---Insert station data
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station A', 'Location A', 20);
-
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station B', 'Location B', 15);
-
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station C', 'Location C', 25);
-
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station D', 'Location D', 30);
-
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station E', 'Location E', 18);
-
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station F', 'Location F', 22);
-
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station G', 'Location G', 27);
-
-INSERT INTO STATIONS (NAME, LOCATION, CAPACITY)
-VALUES ('Station H', 'Location H', 16);
-
---insert trip info
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-01 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-01 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 2, 1, 2, 'Y');
-
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-02 09:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-02 10:15:00', 'YYYY-MM-DD HH24:MI:SS'), 2, 3, 2, 3, 'Y');
-
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-03 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-03 14:45:00', 'YYYY-MM-DD HH24:MI:SS'), 3, 3, 6, 4, 'Y');
-
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-04 16:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-04 17:15:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 1, 4, 5, 'N');
-
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-05 08:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-05 09:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 5, 7, 6, 'Y');
-
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-06 11:15:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-06 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), 4, 6, 1, 7, 'N');
-
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-07 13:45:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-07 14:30:00', 'YYYY-MM-DD HH24:MI:SS'), 1, 7, 1, 8, 'Y');
-
-INSERT INTO TRIPS (START_TIME, END_TIME, BIKES_BIKE_ID, CUSTOMERS_CUSTOMER_ID, START_STATION_ID, END_STATION_ID, TRIP_PAID)
-VALUES (TO_DATE('2022-01-08 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2022-01-08 17:45:00', 'YYYY-MM-DD HH24:MI:SS'), 8, 3, 8, 1, 'Y');
 
 
 -- Create users
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE USER system_admin IDENTIFIED BY BostonSpring2024#';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -1920 THEN  -- ORA-00955: table already exists
+            DBMS_OUTPUT.PUT_LINE('Table bikemaintenance already exists. Skipping creation.');
+        ELSE
+            RAISE;  -- Reraise the exception if it's not ORA-00955
+        END IF;
+END;
+/
+
 BEGIN
     EXECUTE IMMEDIATE 'CREATE USER bike_user IDENTIFIED BY BostonSpring2024#';
 EXCEPTION
@@ -553,14 +390,28 @@ END;
 
 -- Grant necessary privileges to users
 GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance TO maintenance_user;
+GRANT INSERT, UPDATE ON maintenance_log TO maintenance_user;
 
--- Grant SELECT privilege on each object individually
-GRANT SELECT ON customers TO bike_user, maintenance_user;
-GRANT SELECT ON bikes TO bike_user, maintenance_user;
-GRANT SELECT ON card TO bike_user, maintenance_user;
-GRANT SELECT ON fees TO bike_user, maintenance_user;
-GRANT SELECT ON stations TO bike_user, maintenance_user;
-GRANT SELECT ON trips TO bike_user, maintenance_user;
+
+GRANT INSERT, UPDATE ON trips TO bike_user;
+GRANT INSERT, UPDATE ON customers TO bike_user;
+GRANT INSERT, UPDATE ON customer_activity_log TO bike_user;
+GRANT INSERT, UPDATE ON card TO bike_user;
+GRANT INSERT, UPDATE ON card_audit_log TO bike_user;
+
+-- Grant SELECT privilege on each table individually
+GRANT SELECT, INSERT, UPDATE, DELETE ON bikes TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON card TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON card_audit_log TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON customer_activity_log TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON customers TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON fee_changes_log TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON fees TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance_log TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON stations TO system_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON trips TO system_admin;
+
 
 --VEIWS
 BEGIN
@@ -759,6 +610,18 @@ EXCEPTION
 END;
 /
 
+-- grants on views
+GRANT SELECT ON AVERAGE_TRIP_DURATION_PER_BIKE TO system_admin, maintenance_user, bike_user;
+GRANT SELECT ON BIKE_COUNT_PER_STATION TO system_admin, maintenance_user, bike_user;
+GRANT SELECT ON CUSTOMER_MEMBERSHIP_STATUS TO system_admin;
+GRANT SELECT ON CUSTOMER_RENTAL_HISTORY TO system_admin;
+GRANT SELECT ON MAINTENANCE_PER_BIKE TO system_admin, maintenance_user;
+GRANT SELECT ON TOTAL_TRIPS_PER_MONTH TO system_admin, maintenance_user;
+GRANT SELECT ON TRIPS_ENDED_AT_EACH_STATION TO system_admin, maintenance_user;
+GRANT SELECT ON TRIPS_STARTED_AT_EACH_STATION TO system_admin, maintenance_user;
+GRANT SELECT ON UNRETURNED_BIKES TO system_admin, maintenance_user;
+
+
 -- Create Triggers 
 
 CREATE OR REPLACE TRIGGER check_duplicate_customer
@@ -925,38 +788,6 @@ BEGIN
 END;
 /
 
-
---mark_bike_maintenance_procedure
-CREATE OR REPLACE PROCEDURE mark_bike_maintenance_procedure (
-    new_bike_id IN bikes.bike_id%TYPE
-)
-AS
-BEGIN
-    UPDATE bikes
-    SET status = 'Under Maintenance'
-    WHERE bike_id = new_bike_id;
-END mark_bike_maintenance_procedure;
-/
-
---update_bike_status_procedure
-CREATE OR REPLACE PROCEDURE update_bike_status_procedure (
-    new_bike_id IN trips.bikes_bike_id%TYPE,
-    new_end_time IN trips.end_time%TYPE
-)
-AS
-BEGIN
-    IF new_end_time IS NULL THEN
-        UPDATE bikes
-        SET status = 'In Use'
-        WHERE bike_id = new_bike_id;
-    ELSE
-        UPDATE bikes
-        SET status = 'Available'
-        WHERE bike_id = new_bike_id;
-    END IF;
-END update_bike_status_procedure;
-/
-
 --check_bike_availability_procedure
 CREATE OR REPLACE PROCEDURE check_bike_availability_procedure (
     new_bike_id IN trips.bikes_bike_id%TYPE,
@@ -977,21 +808,6 @@ BEGIN
 END check_bike_availability_procedure;
 /
     
---bike_maintenance_log_procedure
-CREATE OR REPLACE PROCEDURE maintenance_log_procedure (
-    new_bike_maintenance_id IN maintenance.maintenance_id%TYPE,
-    new_bike_id IN maintenance.bike_id%TYPE,
-    new_START_OF_MAINTENANCE IN maintenance.START_OF_MAINTENANCE%TYPE,
-    new_END_OF_MAINTENANCE IN maintenance.END_OF_MAINTENANCE%TYPE,
-    new_DESCRIPTION IN maintenance.DESCRIPTION%TYPE,
-    new_MAINTANANCE_OPERATOR IN maintenance.MAINTANANCE_OPERATOR%TYPE
-)
-AS
-BEGIN
-    INSERT INTO maintenance_log (maintenance_id, bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR, LOG_TIME)
-    VALUES (new_bike_maintenance_id, new_bike_id, new_START_OF_MAINTENANCE,new_END_OF_MAINTENANCE,new_DESCRIPTION,new_MAINTANANCE_OPERATOR, SYSDATE);
-END maintenance_log_procedure;
-/
 -- Create or replace the procedure to insert a new maintenance entry
 CREATE OR REPLACE PROCEDURE create_new_maintenance_procedure (
     new_maintenance_id IN maintenance.maintenance_id%TYPE,
@@ -1036,66 +852,16 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END update_end_of_maintenance;
 /
---fee_change_log_procedure
-CREATE OR REPLACE PROCEDURE fee_change_log_procedure (
-    old_fee_id IN fees.fee_id%TYPE,
-    old_fee_per_hour IN fees.fee_per_hour%TYPE,
-    new_fee_per_hour IN fees.fee_per_hour%TYPE
+--fee_change_procedure
+CREATE OR REPLACE PROCEDURE fee_change_procedure (
+    new_fee_per_hour IN fees.fee_per_hour%TYPE,
+    new_date_of_implementation IN fees.date_of_implementation%TYPE
 )
 AS
 BEGIN
-    INSERT INTO fee_changes_log (fee_id, old_fee_per_hour, new_fee_per_hour, change_date)
-    VALUES (old_fee_id, old_fee_per_hour, new_fee_per_hour, SYSDATE);
-END fee_change_log_procedure;
-/
---customer_trip_log_procedure
-CREATE OR REPLACE PROCEDURE customer_trip_log_procedure (
-    new_trip_id IN trips.trip_id%TYPE,
-    new_customer_id IN trips.customers_customer_id%TYPE,
-    new_start_time IN trips.start_time%TYPE,
-    new_end_time IN trips.end_time%TYPE
-)
-AS
-BEGIN
-    INSERT INTO customer_activity_log (trip_id, customer_id, start_time, end_time)
-    VALUES (new_trip_id, new_customer_id, new_start_time, new_end_time);
-END customer_trip_log_procedure;
-/
---card_audit_log_procedure
-CREATE OR REPLACE PROCEDURE card_audit_log_procedure (
-    old_card_id IN card.card_id%TYPE,
-    old_card_number IN card.card_number%TYPE,
-    new_card_number IN card.card_number%TYPE,
-    action_type IN VARCHAR2
-)
-AS
-BEGIN
-    IF action_type = 'UPDATE' THEN
-        INSERT INTO card_audit_log (card_id, old_card_number, new_card_number, change_date, action_type)
-        VALUES (old_card_id, SUBSTR(TO_CHAR(old_card_number), -4), SUBSTR(TO_CHAR(new_card_number), -4), SYSDATE, 'UPDATE');
-    ELSIF action_type = 'DELETE' THEN
-        INSERT INTO card_audit_log (card_id, old_card_number, change_date, action_type)
-        VALUES (old_card_id, SUBSTR(TO_CHAR(old_card_number), -4), SYSDATE, 'DELETE');
-    END IF;
-END card_audit_log_procedure;
-/
-
---prevent_duplicate_customers_procedure
-CREATE OR REPLACE PROCEDURE prevent_duplicate_customers_procedure (
-    new_email IN customers.email%TYPE
-)
-AS
-    email_count NUMBER;
-BEGIN
-    SELECT COUNT(*)
-    INTO email_count
-    FROM customers
-    WHERE email = new_email;
-
-    IF email_count > 0 THEN
-        RAISE_APPLICATION_ERROR(-20002, 'A customer with this email already exists.');
-    END IF;
-END prevent_duplicate_customers_procedure; 
+    INSERT INTO fees (fee_per_hour, date_of_implementation)
+    VALUES (new_fee_per_hour, new_date_of_implementation);
+END fee_change_procedure;
 /
 
 -- Create or replace the procedure to insert a new customer
@@ -1300,6 +1066,17 @@ EXCEPTION
 END;
 /
 
+--grante execute on procedures and functions
+GRANT EXECUTE ON check_bike_availability_procedure TO system_admin, bike_user, maintenance_user;
+GRANT EXECUTE ON create_new_customer TO system_admin, bike_user;
+GRANT EXECUTE ON create_new_maintenance_procedure TO system_admin, maintenance_user;
+GRANT EXECUTE ON fee_change_procedure TO system_admin;
+GRANT EXECUTE ON new_trip TO system_admin, bike_user;
+GRANT EXECUTE ON show_current_trip TO system_admin, bike_user;
+GRANT EXECUTE ON update_end_of_maintenance TO system_admin, maintenance_user;
+GRANT EXECUTE ON update_end_of_trip_details TO system_admin, bike_user;
 
-
-
+GRANT EXECUTE ON calculate_rental_fee TO system_admin;
+GRANT EXECUTE ON get_customer_status TO system_admin;
+GRANT EXECUTE ON get_customer_status TO system_admin, bike_user ,maintenance_user;
+GRANT EXECUTE ON total_trips_from_station TO system_admin, bike_user ,maintenance_user;
