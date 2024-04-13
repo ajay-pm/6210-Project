@@ -4,32 +4,10 @@ BEGIN
     EXECUTE IMMEDIATE 'CREATE SEQUENCE maintenanceID START WITH 1 INCREMENT BY 1';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table maintenanceID already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE TABLE maintenance_log (
-        log_id               NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
-        maintenance_id       NUMBER NOT NULL,
-        bike_id              NUMBER NOT NULL,
-        start_of_maintenance DATE,
-        end_of_maintenance   DATE,
-        description          VARCHAR2(50),
-        maintanance_operator VARCHAR2(50),
-        log_time                    DATE NOT NULL
-    )';
-    DBMS_OUTPUT.PUT_LINE('Table maintenance_log created successfully.');
-EXCEPTION
-    WHEN OTHERS THEN
         IF SQLCODE = -955 THEN
-            DBMS_OUTPUT.PUT_LINE('Table maintenance_log already exists.');
+            DBMS_OUTPUT.PUT_LINE('Sequence maintenanceID already exists. Skipping creation.');
         ELSE
-            RAISE; -- Re-raise the exception if it is not the expected ORA-00955
+            RAISE;
         END IF;
 END;
 /
@@ -38,32 +16,10 @@ BEGIN
     EXECUTE IMMEDIATE 'CREATE SEQUENCE bikeID START WITH 1 INCREMENT BY 1';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table bikeID already exists. Skipping creation.');
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Sequence bikeID already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE TABLE bikes (
-    bike_id       NUMBER DEFAULT bikeID.NEXTVAL NOT NULL ,
-    model         VARCHAR2(50) 
-    ,
-    status        VARCHAR2(50) 
-    ,
-    location_id   VARCHAR2(50) 
-    ,
-    purchase_date DATE
-)';
-EXECUTE IMMEDIATE 'ALTER TABLE bikes ADD CONSTRAINT bikes_pk PRIMARY KEY ( bike_id )';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table bikes already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
@@ -72,29 +28,207 @@ BEGIN
     EXECUTE IMMEDIATE 'CREATE SEQUENCE cardID START WITH 1 INCREMENT BY 1';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table Bike_count_per_station already exists. Skipping creation.');
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Sequence cardID already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE customerID START WITH 1 INCREMENT BY 1';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Sequence customerID already exists. Skipping creation.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE FeeID START WITH 1 INCREMENT BY 1';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Sequence FeeID already exists. Skipping creation.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE stationID START WITH 1 INCREMENT BY 1';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Sequence stationID already exists. Skipping creation.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE tripID START WITH 1 INCREMENT BY 1';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Sequence tripID already exists. Skipping creation.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+-- Create all tables
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE maintenance_log (
+        log_id               NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
+        maintenance_id       NUMBER NOT NULL,
+        bike_id              NUMBER NOT NULL,
+        start_of_maintenance DATE,
+        end_of_maintenance   DATE,
+        description          VARCHAR2(50),
+        maintenance_operator VARCHAR2(50),
+        log_time             DATE NOT NULL
+
+    )';
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance ADD (bike_id NUMBER);
+';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Table maintenance_log already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance_log ADD (DESCRIPTION VARCHAR2(255))';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column DESCRIPTION already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance_log ADD (MAINTENANCE_OPERATOR VARCHAR2(50))';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column MAINTENANCE_OPERATOR already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance_log ADD (START_OF_MAINTENANCE DATE)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column START_OF_MAINTENANCE already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance_log ADD (END_OF_MAINTENANCE DATE)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column END_OF_MAINTENANCE already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance_log ADD (DESCRIPTION VARCHAR2(255))';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column DESCRIPTION already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance_log ADD (BIKE_ID NUMBER)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column BIKE_ID already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance_log ADD (MAINTENANCE_ID NUMBER)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column MAINTENANCE_ID already exists.');
+        ELSE
+            RAISE;
+        END IF;
+END;
+/
+
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE bikes (
+        bike_id       NUMBER DEFAULT bikeID.NEXTVAL NOT NULL,
+        model         VARCHAR2(50),
+        status        VARCHAR2(50),
+        location_id   VARCHAR2(50),
+        purchase_date DATE
+    )';
+    EXECUTE IMMEDIATE 'ALTER TABLE bikes ADD CONSTRAINT bikes_pk PRIMARY KEY (bike_id)';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Table bikes already exists. Skipping creation.');
+        ELSE
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE card (
-    card_id     NUMBER DEFAULT cardID.NEXTVAL NOT NULL,
-    card_number NUMBER,
-    card_expiry DATE,
-    card_ssn    NUMBER,
-    customer_id NUMBER NOT NULL
-)';
-EXECUTE IMMEDIATE 'ALTER TABLE card ADD CONSTRAINT card_pk PRIMARY KEY ( card_id )';
+        card_id     NUMBER DEFAULT cardID.NEXTVAL NOT NULL,
+        card_number NUMBER,
+        card_expiry DATE,
+        card_ssn    NUMBER,
+        customer_id NUMBER NOT NULL
+    )';
+    EXECUTE IMMEDIATE 'ALTER TABLE card ADD CONSTRAINT card_pk PRIMARY KEY (card_id)';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
+        IF SQLCODE = -955 THEN
             DBMS_OUTPUT.PUT_LINE('Table card already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
@@ -108,25 +242,24 @@ BEGIN
         change_date     DATE NOT NULL,
         action_type     VARCHAR2(10) NOT NULL
     )';
-    DBMS_OUTPUT.PUT_LINE('card_audit_log table created successfully.');
+    DBMS_OUTPUT.PUT_LINE('Card_audit_log table created successfully.');
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE = -955 THEN
-            DBMS_OUTPUT.PUT_LINE('card_audit_log table already exists. Skipping creation.');
+            DBMS_OUTPUT.PUT_LINE('Card_audit_log table already exists. Skipping creation.');
         ELSE
-            RAISE; -- Re-raises the exception if it's not the expected ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
-
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE customer_activity_log (
-        log_id        NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
-        trip_id       NUMBER NOT NULL,
-        customer_id   NUMBER NOT NULL,
-        start_time    DATE NOT NULL,
-        end_time      DATE
+        log_id       NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
+        trip_id      NUMBER NOT NULL,
+        customer_id  NUMBER NOT NULL,
+        start_time   DATE NOT NULL,
+        end_time     DATE
     )';
     DBMS_OUTPUT.PUT_LINE('Table customer_activity_log created successfully.');
 EXCEPTION
@@ -134,19 +267,7 @@ EXCEPTION
         IF SQLCODE = -955 THEN
             DBMS_OUTPUT.PUT_LINE('Table customer_activity_log already exists. Skipping creation.');
         ELSE
-            RAISE; -- Re-raise the exception if it is not the expected ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE SEQUENCE customerID START WITH 1 INCREMENT BY 1';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table customerID already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
@@ -158,25 +279,22 @@ BEGIN
         last_name   VARCHAR2(50) NOT NULL,
         email       VARCHAR2(50) NOT NULL,
         phone       NUMBER NOT NULL,
-        status      VARCHAR2(50) DEFAULT ''Active'' 
+        status      VARCHAR2(50) DEFAULT ''Active''
     )';
-    
-    EXECUTE IMMEDIATE 'ALTER TABLE customers ADD CONSTRAINT customers_pk PRIMARY KEY ( customer_id )';
-    
+    EXECUTE IMMEDIATE 'ALTER TABLE customers ADD CONSTRAINT customers_pk PRIMARY KEY (customer_id)';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-    
-                DBMS_OUTPUT.PUT_LINE('Table customers already exists. Skipping creation.');
-            Else
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('Table customers already exists. Skipping creation.');
+        ELSE
+            RAISE;
         END IF;
 END;
 /
-            
+
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE fee_changes_log (
-        log_id            NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1)PRIMARY KEY,
+        log_id            NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
         fee_id            NUMBER NOT NULL,
         old_fee_per_hour  NUMBER,
         new_fee_per_hour  NUMBER,
@@ -188,36 +306,36 @@ EXCEPTION
         IF SQLCODE = -955 THEN
             DBMS_OUTPUT.PUT_LINE('Table fee_changes_log already exists.');
         ELSE
-            RAISE; -- Re-raise the exception if it is not the expected ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE SEQUENCE FeeID START WITH 1 INCREMENT BY 1';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Sequence FeeID already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE fees (
-    fee_id                 NUMBER DEFAULT FeeID.NEXTVAL NOT NULL,
-    fee_per_hour           NUMBER,
-    date_of_implementation DATE
-)';
-EXECUTE IMMEDIATE 'ALTER TABLE fees ADD CONSTRAINT fees_pk PRIMARY KEY ( fee_id )';
+        fee_id                 NUMBER DEFAULT FeeID.NEXTVAL NOT NULL,
+        fee_per_hour           NUMBER,
+        date_of_implementation DATE
+    )';
+    EXECUTE IMMEDIATE 'ALTER TABLE fees ADD CONSTRAINT fees_pk PRIMARY KEY (fee_id)';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
+        IF SQLCODE = -955 THEN
             DBMS_OUTPUT.PUT_LINE('Table fees already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
+        END IF;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP TABLE maintenance PURGE';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -942 THEN
+            DBMS_OUTPUT.PUT_LINE('Table maintenance does not exist, creating new.');
+        ELSE
+            RAISE;
         END IF;
 END;
 /
@@ -230,64 +348,47 @@ BEGIN
         start_of_maintenance DATE,
         end_of_maintenance   DATE,
         description          VARCHAR2(50),
-        maintanance_operator VARCHAR2(50)
+        MAINTENANCE_OPERATOR VARCHAR2(50),
+        CONSTRAINT maintenance_pk PRIMARY KEY (maintenance_id),
+        CONSTRAINT maintenance_bikes_fk FOREIGN KEY (bike_id) REFERENCES bikes (bike_id)
     )';
-    EXECUTE IMMEDIATE 'ALTER TABLE maintenance ADD CONSTRAINT maintenance_pk PRIMARY KEY ( maintenance_id )';
-    EXECUTE IMMEDIATE 'ALTER TABLE maintenance ADD CONSTRAINT trips_bikes_fk FOREIGN KEY ( bike_id ) REFERENCES bikes ( bike_id )';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table maintenance already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
+        DBMS_OUTPUT.PUT_LINE('Error creating table maintenance: ' || SQLERRM);
+        RAISE;
 END;
 /
 
 BEGIN
-    EXECUTE IMMEDIATE 'CREATE SEQUENCE stationID START WITH 1 INCREMENT BY 1';
+    EXECUTE IMMEDIATE 'ALTER TABLE maintenance ADD (MAINTENANCE_OPERATOR VARCHAR2(50))';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table stationI already exists. Skipping creation.');
+        IF SQLCODE = -01430 THEN
+            DBMS_OUTPUT.PUT_LINE('Column MAINTENANCE_OPERATOR already exists in maintenance table.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE TABLE stations (
-    station_id NUMBER DEFAULT stationID.NEXTVAL NOT NULL,
-    name       VARCHAR2(50) 
-    ,
-    location   VARCHAR2(50) 
-    ,
-    capacity   NUMBER
-)';
-EXECUTE IMMEDIATE'ALTER TABLE stations ADD CONSTRAINT stations_pk PRIMARY KEY ( station_id )';
+        station_id NUMBER DEFAULT stationID.NEXTVAL NOT NULL,
+        name       VARCHAR2(50),
+        location   VARCHAR2(50),
+        capacity   NUMBER
+    )';
+    EXECUTE IMMEDIATE 'ALTER TABLE stations ADD CONSTRAINT stations_pk PRIMARY KEY (station_id)';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
+        IF SQLCODE = -955 THEN
             DBMS_OUTPUT.PUT_LINE('Table stations already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE SEQUENCE tripID START WITH 1 INCREMENT BY 1';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table tripID already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
 
 BEGIN
     -- Create the new "TRIPS" table
@@ -299,16 +400,13 @@ BEGIN
         customers_customer_id NUMBER NOT NULL,
         start_station_id      NUMBER NOT NULL,
         end_station_id        NUMBER,
-        trip_paid             VARCHAR2(50) 
+        trip_paid             VARCHAR2(50)
     )';
-
-    -- Add constraints and keys to the "TRIPS" table
-    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_pk PRIMARY KEY ( trip_id )';
-    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_bikes_fk FOREIGN KEY ( bikes_bike_id ) REFERENCES bikes ( bike_id )';
-    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_customers_fk FOREIGN KEY ( customers_customer_id ) REFERENCES customers ( customer_id )';
-    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_stations_fk FOREIGN KEY ( end_station_id ) REFERENCES stations ( station_id )';
-    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_stations_fkv1 FOREIGN KEY ( start_station_id ) REFERENCES stations ( station_id )';
-
+    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_pk PRIMARY KEY (trip_id)';
+    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_bikes_fk FOREIGN KEY (bikes_bike_id) REFERENCES bikes (bike_id)';
+    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_customers_fk FOREIGN KEY (customers_customer_id) REFERENCES customers (customer_id)';
+    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_stations_fk FOREIGN KEY (end_station_id) REFERENCES stations (station_id)';
+    EXECUTE IMMEDIATE 'ALTER TABLE trips ADD CONSTRAINT trips_stations_fkv1 FOREIGN KEY (start_station_id) REFERENCES stations (station_id)';
     DBMS_OUTPUT.PUT_LINE('Table "TRIPS" created successfully.');
 EXCEPTION
     WHEN OTHERS THEN
@@ -316,90 +414,21 @@ EXCEPTION
 END;
 /
 
-
-BEGIN
-EXECUTE IMMEDIATE 'ALTER TABLE bikemaintenance
-    ADD CONSTRAINT bikemaintenance_bikes_fk FOREIGN KEY ( bikes_bike_id )
-        REFERENCES bikes ( bike_id )';
-EXECUTE IMMEDIATE 'ALTER TABLE bikemaintenance
-    ADD CONSTRAINT bikemaintenance_maintenance_fk FOREIGN KEY ( maintenance_maintenance_id )
-        REFERENCES maintenance ( maintenance_id )';
-EXECUTE IMMEDIATE 'ALTER TABLE card
-    ADD CONSTRAINT card_customers_fk FOREIGN KEY ( customer_id )
-        REFERENCES customers ( customer_id )';
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-
--- Create users
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE USER bike_user IDENTIFIED BY BostonSpring2024#';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -1920 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table bikemaintenance already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE USER maintenance_user IDENTIFIED BY NEUSpring2024';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -1920 THEN  -- ORA-00955: table already exists
-            DBMS_OUTPUT.PUT_LINE('Table bikemaintenance already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
-
--- Grant necessary privileges to users
-GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance TO maintenance_user;
-GRANT INSERT, UPDATE ON maintenance_log TO maintenance_user;
-
-
-GRANT INSERT, UPDATE ON trips TO bike_user;
-GRANT INSERT, UPDATE ON customers TO bike_user;
-GRANT INSERT, UPDATE ON customer_activity_log TO bike_user;
-GRANT INSERT, UPDATE ON card TO bike_user;
-GRANT INSERT, UPDATE ON card_audit_log TO bike_user;
-
--- Grant SELECT privilege on each table individually
-GRANT SELECT, INSERT, UPDATE, DELETE ON bikes TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON card TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON card_audit_log TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON customer_activity_log TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON customers TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON fee_changes_log TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON fees TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON maintenance_log TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON stations TO system_admin;
-GRANT SELECT, INSERT, UPDATE, DELETE ON trips TO system_admin;
-
-
---VEIWS
+-- Create all views
 BEGIN
     EXECUTE IMMEDIATE 'CREATE VIEW Bike_count_per_station AS
-SELECT s.station_id,
-       s.name AS station_name,
-       COUNT(b.bike_id) AS bike_count
-FROM stations s
-LEFT JOIN bikes b ON s.name = b.location_id
-GROUP BY s.station_id, s.name';
+    SELECT s.station_id,
+           s.name AS station_name,
+           COUNT(b.bike_id) AS bike_count
+    FROM stations s
+    LEFT JOIN bikes b ON s.name = b.location_id
+    GROUP BY s.station_id, s.name';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
-            DBMS_OUTPUT.PUT_LINE('View Total_trips_per_month already exists. Skipping creation.');
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('View Bike_count_per_station already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
@@ -407,177 +436,159 @@ END;
 BEGIN
     EXECUTE IMMEDIATE 'CREATE VIEW Total_trips_per_month AS
     SELECT TO_CHAR(start_time, ''YYYY-MM'') AS trip_month,
-    COUNT(*) AS total_trips
+           COUNT(*) AS total_trips
     FROM trips
     GROUP BY TO_CHAR(start_time, ''YYYY-MM'')';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
+        IF SQLCODE = -955 THEN
             DBMS_OUTPUT.PUT_LINE('View Total_trips_per_month already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
-        END IF;
-END;
-/
-
-BEGIN
-    EXECUTE IMMEDIATE 'CREATE VIEW Maintenance_per_bike AS
-    SELECT
-        b.bike_id,
-        b.model,
-        m.start_of_maintenance,
-        m.end_of_maintenance,
-        m.description,
-        m.maintanance_operator
-    FROM
-        bikes b
-    LEFT JOIN
-        maintenance m ON b.bike_id = m.bike_id';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
-            DBMS_OUTPUT.PUT_LINE('View Maintenance_per_bike already exists. Skipping creation.');
-        ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
     EXECUTE IMMEDIATE '
-            CREATE VIEW Trips_started_at_each_station AS
-            SELECT start_station_id AS station_id,
-                COUNT(trip_id) AS trips_started
-            FROM trips
-            GROUP BY start_station_id
-            Order by start_station_id';
+    CREATE OR REPLACE VIEW Maintenance_per_bike AS
+    SELECT b.bike_id,
+           b.model,
+           m.start_of_maintenance,
+           m.end_of_maintenance,
+           m.description,
+           m.maintenance_operator
+    FROM bikes b
+    LEFT JOIN maintenance m ON b.bike_id = m.bike_id';
+    DBMS_OUTPUT.PUT_LINE('View Maintenance_per_bike created or replaced successfully.');
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
-            DBMS_OUTPUT.PUT_LINE('View Maintenance_per_bike already exists. Skipping creation.');
+        DBMS_OUTPUT.PUT_LINE('Error in creating view Maintenance_per_bike: ' || SQLERRM);
+END;
+/
+
+
+BEGIN
+    EXECUTE IMMEDIATE '
+    CREATE VIEW Trips_started_at_each_station AS
+    SELECT start_station_id AS station_id,
+           COUNT(trip_id) AS trips_started
+    FROM trips
+    GROUP BY start_station_id
+    ORDER BY start_station_id';
+EXCEPTION
+    WHEN OTHERS THEN
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('View Trips_started_at_each_station already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
     EXECUTE IMMEDIATE '
-            CREATE VIEW Trips_ended_at_each_station AS
-            SELECT end_station_id AS station_id,
-                COUNT(trip_id) AS trips_ended
-            FROM trips
-            GROUP BY end_station_id
-            Order by end_station_id';
+    CREATE VIEW Trips_ended_at_each_station AS
+    SELECT end_station_id AS station_id,
+           COUNT(trip_id) AS trips_ended
+    FROM trips
+    GROUP BY end_station_id
+    ORDER BY end_station_id';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
-            DBMS_OUTPUT.PUT_LINE('View Maintenance_per_bike already exists. Skipping creation.');
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('View Trips_ended_at_each_station already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
-EXECUTE IMMEDIATE '
-                CREATE VIEW Customer_rental_history AS
-                SELECT
-                    c.customer_id,
-                    c.first_name || '' '' || c.last_name AS customer_name,
-                    t.trip_id,
-                    t.start_time,
-                    t.end_time,
-                    t.start_station_id AS start_station,
-                    t.end_station_id AS end_station,
-                    t.trip_paid
-                FROM customers c
-                JOIN trips t ON c.customer_id = t.customers_customer_id';
+    EXECUTE IMMEDIATE '
+    CREATE VIEW Customer_rental_history AS
+    SELECT c.customer_id,
+           c.first_name || '' '' || c.last_name AS customer_name,
+           t.trip_id,
+           t.start_time,
+           t.end_time,
+           t.start_station_id AS start_station,
+           t.end_station_id AS end_station,
+           t.trip_paid
+    FROM customers c
+    JOIN trips t ON c.customer_id = t.customers_customer_id';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
-            DBMS_OUTPUT.PUT_LINE('View Maintenance_per_bike already exists. Skipping creation.');
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('View Customer_rental_history already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
-            EXECUTE IMMEDIATE '
-                CREATE VIEW Customer_membership_status AS
-                SELECT
-                    c.customer_id,
-                    c.first_name || '' '' || c.last_name AS customer_name,
-                    CASE
-                        WHEN cr.card_id IS NOT NULL THEN ''Active''
-                        ELSE ''Inactive''
-                    END AS membership_status
-                FROM customers c
-                LEFT JOIN card cr ON c.customer_id = cr.customer_id';
+    EXECUTE IMMEDIATE '
+    CREATE VIEW Customer_membership_status AS
+    SELECT c.customer_id,
+           c.first_name || '' '' || c.last_name AS customer_name,
+           CASE
+               WHEN cr.card_id IS NOT NULL THEN ''Active''
+               ELSE ''Inactive''
+           END AS membership_status
+    FROM customers c
+    LEFT JOIN card cr ON c.customer_id = cr.customer_id';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
-            DBMS_OUTPUT.PUT_LINE('View Maintenance_per_bike already exists. Skipping creation.');
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('View Customer_membership_status already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
-                        EXECUTE IMMEDIATE '
-                CREATE VIEW Unreturned_bikes AS
-                SELECT
-                    t.trip_id,
-                    t.start_time AS rental_start_time,
-                    t.bikes_bike_id AS bike_id,
-                    c.customer_id AS customer_id,
-                    c.first_name || '' '' || c.last_name AS customer_name,
-                    t.start_station_id AS rented_from_station_id,
-                    s1.name AS rented_from_station_name
-                FROM
-                    trips t
-                INNER JOIN
-                    customers c ON t.customers_customer_id = c.customer_id
-                INNER JOIN
-                    stations s1 ON t.start_station_id = s1.station_id
-                LEFT JOIN
-                    stations s2 ON t.end_station_id = s2.station_id
-                WHERE
-                    t.end_time IS NULL';
+    EXECUTE IMMEDIATE '
+    CREATE VIEW Unreturned_bikes AS
+    SELECT t.trip_id,
+           t.start_time AS rental_start_time,
+           t.bikes_bike_id AS bike_id,
+           c.customer_id AS customer_id,
+           c.first_name || '' '' || c.last_name AS customer_name,
+           t.start_station_id AS rented_from_station_id,
+           s1.name AS rented_from_station_name
+    FROM trips t
+    INNER JOIN customers c ON t.customers_customer_id = c.customer_id
+    INNER JOIN stations s1 ON t.start_station_id = s1.station_id
+    LEFT JOIN stations s2 ON t.end_station_id = s2.station_id
+    WHERE t.end_time IS NULL';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
-            DBMS_OUTPUT.PUT_LINE('View Maintenance_per_bike already exists. Skipping creation.');
+        IF SQLCODE = -955 THEN
+            DBMS_OUTPUT.PUT_LINE('View Unreturned_bikes already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
 
 BEGIN
     EXECUTE IMMEDIATE 'CREATE VIEW Average_trip_duration_per_bike AS
-    SELECT
-        t.bikes_bike_id AS bike_id,
-        TRUNC(AVG(diff_minutes) / 60) || '' hours '' ||
-        MOD(AVG(diff_minutes), 60) || '' minutes'' AS average_duration
-    FROM
-        (SELECT
-            bikes_bike_id,
-            (MAX(end_time) - MIN(start_time)) * 24 * 60 AS diff_minutes -- Total minutes difference
-        FROM
-            trips
-        GROUP BY
-            bikes_bike_id) t
-    GROUP BY
-        t.bikes_bike_id';
+    SELECT t.bikes_bike_id AS bike_id,
+           TRUNC(AVG(diff_minutes) / 60) || '' hours '' ||
+           MOD(AVG(diff_minutes), 60) || '' minutes'' AS average_duration
+    FROM (SELECT bikes_bike_id,
+                 (MAX(end_time) - MIN(start_time)) * 24 * 60 AS diff_minutes
+          FROM trips
+          GROUP BY bikes_bike_id) t
+    GROUP BY t.bikes_bike_id';
 EXCEPTION
     WHEN OTHERS THEN
-        IF SQLCODE = -955 THEN  -- ORA-00955: view already exists
+        IF SQLCODE = -955 THEN
             DBMS_OUTPUT.PUT_LINE('View Average_trip_duration_per_bike already exists. Skipping creation.');
         ELSE
-            RAISE;  -- Reraise the exception if it's not ORA-00955
+            RAISE;
         END IF;
 END;
 /
@@ -593,9 +604,7 @@ GRANT SELECT ON TRIPS_ENDED_AT_EACH_STATION TO system_admin, maintenance_user;
 GRANT SELECT ON TRIPS_STARTED_AT_EACH_STATION TO system_admin, maintenance_user;
 GRANT SELECT ON UNRETURNED_BIKES TO system_admin, maintenance_user;
 
-
--- Create Triggers 
-
+-- Create Triggers
 CREATE OR REPLACE TRIGGER check_duplicate_customer
 BEFORE INSERT ON customers
 FOR EACH ROW
@@ -603,19 +612,9 @@ DECLARE
     phone_exists NUMBER;
     email_exists NUMBER;
 BEGIN
-    -- Check if the new row being inserted has a duplicate phone number
-    SELECT COUNT(*)
-    INTO phone_exists
-    FROM customers
-    WHERE phone = :new.phone;
+    SELECT COUNT(*) INTO phone_exists FROM customers WHERE phone = :new.phone;
+    SELECT COUNT(*) INTO email_exists FROM customers WHERE email = :new.email;
 
-    -- Check if the new row being inserted has a duplicate email
-    SELECT COUNT(*)
-    INTO email_exists
-    FROM customers
-    WHERE email = :new.email;
-
-    -- If a duplicate phone number or email is found, raise an exception
     IF phone_exists > 0 THEN
         RAISE_APPLICATION_ERROR(-20001, 'A customer with this phone number already exists.');
     ELSIF email_exists > 0 THEN
@@ -629,29 +628,24 @@ AFTER INSERT OR DELETE ON bikes
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
-        -- Increase capacity when a bike is added
-        UPDATE stations
-        SET capacity = capacity + 1
-        WHERE name = :new.location_id; -- Match station name to location_id from bikes
+        UPDATE stations SET capacity = capacity + 1 WHERE name = :new.location_id;
     ELSIF DELETING THEN
-        -- Decrease capacity when a bike is removed
-        UPDATE stations
-        SET capacity = capacity - 1
-        WHERE name = :old.location_id; -- Match station name to location_id from bikes
+        UPDATE stations SET capacity = capacity - 1 WHERE name = :old.location_id;
     END IF;
 END;
 /
 
-
+-- Assuming the maintenance table is correctly set up:
 CREATE OR REPLACE TRIGGER mark_bike_maintenance
 AFTER INSERT ON maintenance
 FOR EACH ROW
 BEGIN
     UPDATE bikes
     SET status = 'Under Maintenance'
-    WHERE bike_id = :new.bike_id;
+    WHERE bike_id = :new.bike_id;  
 END;
 /
+
 
 CREATE OR REPLACE TRIGGER update_bike_status
 AFTER INSERT OR UPDATE OF end_time ON trips
@@ -688,13 +682,29 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER trg_bikemaintenance_log
-AFTER INSERT OR Update ON maintenance
+AFTER INSERT OR UPDATE ON maintenance
 FOR EACH ROW
 BEGIN
-    INSERT INTO maintenance_log (maintenance_id, bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR, LOG_TIME)
-    VALUES (:new.maintenance_id, :new.bike_id, :new.START_OF_MAINTENANCE, :new.END_OF_MAINTENANCE, :new.DESCRIPTION, :new.MAINTANANCE_OPERATOR, SYSDATE);
+    INSERT INTO maintenance_log (
+        maintenance_id, 
+        bike_id, 
+        start_of_maintenance, 
+        end_of_maintenance, 
+        description, 
+        maintenance_operator, 
+        log_time
+    ) VALUES (
+        :new.maintenance_id, 
+        :new.bike_id, 
+        :new.start_of_maintenance, 
+        :new.end_of_maintenance, 
+        :new.description, 
+        :new.maintenance_operator, 
+        SYSDATE
+    );
 END;
 /
+
 
 CREATE OR REPLACE TRIGGER trg_fee_change_log
 AFTER UPDATE OF fee_per_hour ON fees
@@ -779,39 +789,16 @@ BEGIN
     END IF;
 END check_bike_availability_procedure;
 /
-    
--- Create or replace the procedure to insert a new maintenance entry
-CREATE OR REPLACE PROCEDURE create_new_maintenance_procedure (
-    new_maintenance_id IN maintenance.maintenance_id%TYPE,
-    new_bike_id IN maintenance.bike_id%TYPE,
-    new_start_of_maintenance IN maintenance.START_OF_MAINTENANCE%TYPE,
-    new_end_of_maintenance IN maintenance.END_OF_MAINTENANCE%TYPE,
-    new_description IN maintenance.DESCRIPTION%TYPE,
-    new_maintenance_operator IN maintenance.MAINTANANCE_OPERATOR%TYPE
-)
-AS
-BEGIN
-    INSERT INTO maintenance (maintenance_id, bike_id, START_OF_MAINTENANCE, END_OF_MAINTENANCE, DESCRIPTION, MAINTANANCE_OPERATOR)
-    VALUES (new_maintenance_id, new_bike_id, new_start_of_maintenance, new_end_of_maintenance, new_description, new_maintenance_operator);
-
-    COMMIT;
-    DBMS_OUTPUT.PUT_LINE('New maintenance log entry created successfully.');
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END create_new_maintenance_procedure;
-/
 
 -- Create or replace the procedure to update the end of maintenance in a maintenance log entry
 CREATE OR REPLACE PROCEDURE update_end_of_maintenance (
     maintenance_log_id IN maintenance_log.maintenance_id%TYPE,
-    new_end_of_maintenance IN maintenance_log.END_OF_MAINTENANCE%TYPE
+    new_end_of_maintenance IN maintenance_log.end_of_maintenance%TYPE
 )
 AS
 BEGIN
     UPDATE maintenance
-    SET END_OF_MAINTENANCE = new_end_of_maintenance
+    SET end_of_maintenance = new_end_of_maintenance
     WHERE maintenance_id = maintenance_log_id;
 
     COMMIT;
@@ -822,8 +809,9 @@ EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END update_end_of_maintenance;
+END;
 /
+
 --fee_change_procedure
 CREATE OR REPLACE PROCEDURE fee_change_procedure (
     new_fee_per_hour IN fees.fee_per_hour%TYPE,
@@ -872,11 +860,10 @@ CREATE OR REPLACE PROCEDURE new_trip (
     new_bike_id IN trips.bikes_bike_id%TYPE,
     new_customer_id IN trips.customers_customer_id%TYPE,
     new_start_station_id IN trips.start_station_id%TYPE
-)
-AS
+) AS
 BEGIN
-    INSERT INTO trips (start_time, end_time, bikes_bike_id, customers_customer_id, start_station_id, end_station_id, trip_paid)
-    VALUES (SYSDATE, NULL, new_bike_id, new_customer_id, new_start_station_id, NULL, NULL);
+    INSERT INTO trips (start_time, bikes_bike_id, customers_customer_id, start_station_id)
+    VALUES (SYSDATE, new_bike_id, new_customer_id, new_start_station_id);
 
     COMMIT;
     DBMS_OUTPUT.PUT_LINE('New trip entry created successfully.');
@@ -884,7 +871,7 @@ EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END new_trip;
+END;
 /
 
 -- Create or replace the procedure to show a customer their current trip
@@ -1063,3 +1050,6 @@ GRANT EXECUTE ON calculate_rental_fee TO system_admin;
 GRANT EXECUTE ON get_customer_status TO system_admin;
 GRANT EXECUTE ON get_customer_status TO system_admin, bike_user ,maintenance_user;
 GRANT EXECUTE ON total_trips_from_station TO system_admin, bike_user ,maintenance_user;
+
+
+
